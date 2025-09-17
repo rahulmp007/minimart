@@ -20,8 +20,8 @@ String? mapEmailError(EmailAddress? email) {
   return email?.value.fold((failure) => "Invalid email format", (_) => null);
 }
 
-String? mapNameError(Name name) {
-  return name.value.fold(
+String? mapNameError(Name? name) {
+  return name?.value.fold(
     (failure) => "Name must be at least 2 characters",
     (_) => null,
   );

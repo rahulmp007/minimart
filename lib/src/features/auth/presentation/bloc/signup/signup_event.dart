@@ -28,8 +28,4 @@ class PasswordChanged extends SignupEvent {
   PasswordChanged({required this.value});
 }
 
-class HidePassword extends SignupEvent {}
-
-class ShowPassword extends SignupEvent {}
-
 class TogglePasswordVisibility extends SignupEvent {}

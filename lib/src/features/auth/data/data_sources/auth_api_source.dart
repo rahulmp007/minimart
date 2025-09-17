@@ -27,14 +27,18 @@ class AuthApiService {
     String email,
     String password,
   ) async {
-    final response = await client.post(
-      url: '$baseUrl/signup',
-      data: {'name': name, 'email': email, 'password': password},
-    );
+    // final response = await client.post(
+    //   url: '$baseUrl/signup',
+    //   data: {'name': name, 'email': email, 'password': password},
+    // );
+    await Future.delayed(Duration(seconds: 2));
+
+    final response = await Future.value({'status': true});
+
     if (response['status'] == true) {
-      return response;
+      return {"id": "1", "name": "rahul", "email": "rahul@gmail.com"};
     } else {
-      throw Exception("Signup failed: $response");
+      throw Exception("Login failed: $response");
     }
   }
 }

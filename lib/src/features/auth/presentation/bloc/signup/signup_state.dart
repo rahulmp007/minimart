@@ -12,6 +12,8 @@ class SignupState extends Equatable {
   final bool? showPassword;
   final User? user;
   final bool isSubmitting;
+  final String? errorMessage;
+
   const SignupState({
     this.fullname,
     this.email,
@@ -19,6 +21,7 @@ class SignupState extends Equatable {
     this.showPassword = false,
     this.user,
     this.isSubmitting = false,
+    this.errorMessage,
   });
 
   bool get isPasswordVisible => showPassword ?? false;
@@ -28,13 +31,14 @@ class SignupState extends Equatable {
   bool get canSubmit =>
       isEmailValid && isPasswordValid && isNameValid && !isSubmitting;
 
-  SignupState copywith({
+  SignupState copyWith({
     Name? fullname,
     EmailAddress? email,
     Password? password,
     bool? showPassword,
     User? user,
     bool? isSubmitting,
+    String? errorMessage,
   }) {
     return SignupState(
       fullname: fullname ?? this.fullname,
@@ -43,6 +47,7 @@ class SignupState extends Equatable {
       showPassword: showPassword ?? this.showPassword,
       user: user ?? this.user,
       isSubmitting: isSubmitting ?? this.isSubmitting,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
@@ -53,6 +58,7 @@ class SignupState extends Equatable {
     showPassword: false,
     user: null,
     isSubmitting: false,
+    errorMessage: null,
   );
 
   @override
@@ -63,6 +69,7 @@ class SignupState extends Equatable {
     user,
     showPassword,
     isSubmitting,
+    errorMessage,
   ];
 
   @override
