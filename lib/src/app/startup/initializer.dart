@@ -34,8 +34,6 @@ Future initializer() async {
             logoutUser: sl<LogoutUser>(),
           ),
         ),
-        BlocProvider(create: (_) => LoginBloc(loginUser: sl<LoginUser>())),
-        BlocProvider(create: (_) => SignupBloc(signupUser: sl<SignupUser>())),
       ],
       child: MiniMart(),
     ),

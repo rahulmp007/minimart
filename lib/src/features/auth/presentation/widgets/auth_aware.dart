@@ -35,7 +35,7 @@ class AuthAwareWidget extends StatelessWidget {
     } else if (state is Unauthenticated) {
       Navigator.of(
         context,
-      ).push(MaterialPageRoute(builder: (context) => LoginPage()));
+      ).push(MaterialPageRoute(builder: (context) => Login()));
     }
   }
 
@@ -43,7 +43,7 @@ class AuthAwareWidget extends StatelessWidget {
     return switch (state) {
       AuthLoading() => loadingWidget ?? _defaultLoadingWidget(),
       Authenticated() => const HomePage(),
-      Unauthenticated() => unauthenticatedWidget ?? const LoginPage(),
+      Unauthenticated() => unauthenticatedWidget ?? const Login(),
       AuthError() => errorWidget ?? _defaultErrorWidget(state.message),
       _ => _defaultUnknownStateWidget(),
     };
