@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minimart/src/features/auth/domain/usecases/signup_user.dart';
+import 'package:minimart/src/features/auth/presentation/bloc/login/login_bloc.dart';
 import 'package:minimart/src/features/auth/presentation/bloc/signup/signup_bloc.dart';
+import 'package:minimart/src/features/auth/presentation/bloc/signup/signup_event.dart';
+import 'package:minimart/src/features/auth/presentation/bloc/signup/signup_state.dart';
 import 'package:minimart/src/injection/service_locator.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,7 +21,7 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  bool _obscure = true;
+  final bool _obscure = true;
   bool _loading = false;
 
   late final AnimationController _animController;
@@ -197,10 +202,12 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                       icon: Icons.person_outline,
                                     ),
                                     validator: (v) {
-                                      if (v == null || v.trim().isEmpty)
+                                      if (v == null || v.trim().isEmpty) {
                                         return 'Please enter your name';
-                                      if (v.trim().length < 2)
+                                      }
+                                      if (v.trim().length < 2) {
                                         return 'Name too short';
+                                      }
                                       return null;
                                     },
                                   ),
@@ -217,13 +224,15 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                       icon: Icons.email_outlined,
                                     ),
                                     validator: (v) {
-                                      if (v == null || v.trim().isEmpty)
+                                      if (v == null || v.trim().isEmpty) {
                                         return 'Please enter your email';
+                                      }
                                       final emailRegex = RegExp(
                                         r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}",
                                       );
-                                      if (!emailRegex.hasMatch(v.trim()))
+                                      if (!emailRegex.hasMatch(v.trim())) {
                                         return 'Enter a valid email';
+                                      }
                                       return null;
                                     },
                                   ),
@@ -231,32 +240,55 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                   const SizedBox(height: 12),
 
                                   // Password
-                                  TextFormField(
-                                    controller: _passwordCtrl,
-                                    obscureText: _obscure,
-                                    textInputAction: TextInputAction.done,
-                                    decoration:
-                                        _inputDecoration(
-                                          hint: 'Password',
-                                          icon: Icons.lock_outline,
-                                        ).copyWith(
+                                  BlocBuilder<SignupBloc, SignupState>(
+                                    builder: (context, state) {
+                                      return TextFormField(
+                                        controller: _passwordCtrl,
+                                        obscureText: !state.isPasswordVisible,
+                                        textInputAction: TextInputAction.done,
+                                        decoration: InputDecoration(
+                                          hintText: 'Password',
+                                          prefixIcon: Icon(Icons.lock_outline),
+                                          filled: true,
                                           suffixIcon: IconButton(
+                                            onPressed: () {
+                                              context.read<SignupBloc>().add(
+                                                TogglePasswordVisibility(),
+                                              );
+                                            },
                                             icon: Icon(
-                                              _obscure
+                                              !state.isPasswordVisible
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
                                             ),
-                                            onPressed: () => setState(
-                                              () => _obscure = !_obscure,
+                                          ),
+
+                                          fillColor: Colors.white.withOpacity(
+                                            0.9,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                vertical: 18,
+                                                horizontal: 16,
+                                              ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              14,
                                             ),
+                                            borderSide: BorderSide.none,
                                           ),
                                         ),
-                                    validator: (v) {
-                                      if (v == null || v.isEmpty)
-                                        return 'Please enter a password';
-                                      if (v.length < 6)
-                                        return 'Password must be at least 6 characters';
-                                      return null;
+
+                                        validator: (v) {
+                                          if (v == null || v.isEmpty) {
+                                            return 'Please enter a password';
+                                          }
+                                          if (v.length < 6) {
+                                            return 'Password must be at least 6 characters';
+                                          }
+                                          return null;
+                                        },
+                                      );
                                     },
                                   ),
 

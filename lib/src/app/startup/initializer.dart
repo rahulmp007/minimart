@@ -8,12 +8,8 @@ import 'package:minimart/src/app/startup/bloc/app_startup_event.dart';
 import 'package:minimart/src/core/network/connectivity/bloc/network_bloc.dart';
 import 'package:minimart/src/core/service/hive_service.dart';
 import 'package:minimart/src/features/auth/domain/usecases/get_current_user.dart';
-import 'package:minimart/src/features/auth/domain/usecases/login_user.dart';
 import 'package:minimart/src/features/auth/domain/usecases/logout_user.dart';
-import 'package:minimart/src/features/auth/domain/usecases/signup_user.dart';
 import 'package:minimart/src/features/auth/presentation/bloc/auth/auth_bloc.dart';
-import 'package:minimart/src/features/auth/presentation/bloc/login/login_bloc.dart';
-import 'package:minimart/src/features/auth/presentation/bloc/signup/signup_bloc.dart';
 import 'package:minimart/src/injection/service_locator.dart';
 
 Future initializer() async {
