@@ -14,6 +14,15 @@ import 'package:minimart/src/features/auth/domain/usecases/get_current_user.dart
 import 'package:minimart/src/features/auth/domain/usecases/login_user.dart';
 import 'package:minimart/src/features/auth/domain/usecases/logout_user.dart';
 import 'package:minimart/src/features/auth/domain/usecases/signup_user.dart';
+import 'package:minimart/src/features/categories/data/data_sources/category_api_source.dart';
+import 'package:minimart/src/features/categories/data/data_sources/category_local_source.dart';
+import 'package:minimart/src/features/categories/data/repository/category_repository_impl.dart';
+import 'package:minimart/src/features/categories/domain/repository/category_repository.dart';
+import 'package:minimart/src/features/categories/domain/usecases/get_categories.dart';
+import 'package:minimart/src/features/products/data/data_sources/product_api_source.dart';
+import 'package:minimart/src/features/products/data/repository/product_repository_impl.dart';
+import 'package:minimart/src/features/products/domain/repository/product_repository.dart';
+import 'package:minimart/src/features/products/domain/usecases/fetch_products.dart';
 
 final sl = GetIt.instance;
 
@@ -29,7 +38,7 @@ Future<void> setupLocator() async {
       connectivity: sl<Connectivity>(),
     ),
   );
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => NetworkBloc(connectivityService: sl<ConnectivityService>()),
   );
 
@@ -59,7 +68,7 @@ Future<void> setupLocator() async {
     ),
   );
 
-  /// usecases
+  /// usecases : auth
   sl.registerLazySingleton<LoginUser>(
     () => LoginUser(repository: sl<AuthRepository>()),
   );
@@ -71,5 +80,43 @@ Future<void> setupLocator() async {
   );
   sl.registerLazySingleton<LogoutUser>(
     () => LogoutUser(repository: sl<AuthRepository>()),
+  );
+
+  /// usecases : products
+  sl.registerLazySingleton<FetchProducts>(
+    () => FetchProducts(productRepo: sl<ProductRepository>()),
+  );
+
+  /// repository : products
+  sl.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(api: sl<ProductApiSource>()),
+  );
+
+  /// remote data source : products
+  sl.registerLazySingleton<ProductApiSource>(
+    () => ProductApiSource(client: sl<ApiClient>()),
+  );
+
+  /// usecases : categories
+  sl.registerLazySingleton<GetCategories>(
+    () => GetCategories(categoryRepository: sl<CategoryRepository>()),
+  );
+
+  /// repository : categories
+  sl.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(
+      api: sl<CategoryApiSource>(),
+      localSource: sl<CategoryLocalSource>(),
+    ),
+  );
+
+  /// remote data source : categories
+  sl.registerLazySingleton<CategoryApiSource>(
+    () => CategoryApiSource(client: sl<ApiClient>()),
+  );
+
+  /// local data source : categories
+  sl.registerLazySingleton<CategoryLocalSource>(
+    () => CategoryLocalSourceImpl(localStorage: sl<LocalStorageService>()),
   );
 }

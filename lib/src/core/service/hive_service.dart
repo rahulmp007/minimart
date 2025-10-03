@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:minimart/src/features/categories/data/models/category_model.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../features/auth/data/models/user_model.dart'; // example model
 
@@ -14,5 +15,6 @@ class HiveService {
 
     /// registering adapters
     Hive.registerAdapter(UserModelAdapter());
+    Hive.registerAdapter(CategoryModelAdapter());
   }
 }
